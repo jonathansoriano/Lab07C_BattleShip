@@ -13,17 +13,18 @@ public class GameBoard {
     private static final char HIT = 'X';
     private static final char MISS = 'M';
 
-    private JButton[][] buttons = new JButton[BOARD_SIZE][BOARD_SIZE];
+    private JButton[][] buttons = new JButton[BOARD_SIZE][BOARD_SIZE];//This 2D array is used for the game board
     private char[][] board = new char[BOARD_SIZE][BOARD_SIZE];
-    private List<List<Point>> ships = new ArrayList<>();
+    private List<List<Point>> ships = new ArrayList<>();//This List is for the random placement of the ships
     private int remainingShips;
     private GameStats gameStats;
     private BattleshipGame gameInstance;
 
+    //Constructor that takes 2 parameters
     public GameBoard(GameStats gameStats, BattleshipGame gameInstance) {
         this.gameStats = gameStats;
         this.gameInstance = gameInstance;
-        initializeBoard();
+        initializeBoard();//Setting the whole board to "WATER" (tilde symbol)
         placeShipsRandomly();
     }
 
@@ -42,6 +43,10 @@ public class GameBoard {
         return boardPanel;
     }
 
+    /**
+     * This method provides the game logic of the game. This 2D array is actually were we placing the ships at random.
+     * First we set the whole iteration of the array to the tilde symbol (WATER).
+     */
     private void initializeBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
@@ -50,27 +55,28 @@ public class GameBoard {
         }
     }
 
-    private void placeShipsRandomly() { // <-------------------------------------------------------
+    private void placeShipsRandomly() {
         Random random = new Random();
         int[] shipSizes = {5, 4, 3, 3, 2}; // Example ship sizes
-        remainingShips = shipSizes.length;
+        remainingShips = shipSizes.length; //5 ships
 
-        for (int size : shipSizes) {
+        for (int size : shipSizes) { //size represents an element from the shipSizes array (5,4,3,3,2).
+
             boolean placed = false;
-            while (!placed) {
-                int row = random.nextInt(BOARD_SIZE);
+            while (!placed) {//While placed is false, we keep looping, until its "not" false.
+                int row = random.nextInt(BOARD_SIZE);// Can choose a number between 0-9
                 int col = random.nextInt(BOARD_SIZE);
-                boolean horizontal = random.nextBoolean();
+                boolean horizontal = random.nextBoolean();//Randomly chooses between true or false.
 
                 if (canPlaceShip(row, col, size, horizontal)) {
                     placeShip(row, col, size, horizontal);
                     placed = true;
                 }
             }
+
         }
     }
 
-    // ... (other methods remain the same)
     private boolean canPlaceShip(int row, int col, int size, boolean horizontal) {
         if (horizontal) {
             if (col + size > BOARD_SIZE) return false;
@@ -150,7 +156,7 @@ public class GameBoard {
                 }
             }
 
-            buttons[row][col].setEnabled(false);
+            buttons[row][col].setEnabled(false);//Disables the button that have been clicked...
         }
     }
     private boolean isShipSunk(int hitRow,int hitCol){
@@ -181,8 +187,8 @@ public class GameBoard {
                 buttons[i][j].setText(String.valueOf(WATER));
                 buttons[i][j].setEnabled(true);
 
-                buttons[i][j].setBackground(null);  // Reset background to cyan (water)
-                buttons[i][j].setOpaque(true);
+                buttons[i][j].setBackground(null);  // Reset background to its default color which is actually nothing or null.
+                buttons[i][j].setOpaque(true);//This actually sets the color for the button. Without this, color won't appear.
                 buttons[i][j].setBorderPainted(true);
 
             }
